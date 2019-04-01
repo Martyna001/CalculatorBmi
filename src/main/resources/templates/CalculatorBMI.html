@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalkulator BMI</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Teko:400,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <div>
+        <section id="bmistyle2">
+            <div><font color="black" size="7">
+                <center><b>KALKULATOR BMI</b></center>
+            </font></div>
+        </section>
+    </div>
+    <style>
+        #bmistyle2 {
+            font-family: "Arial Rounded MT Bold";
+            background-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(255, 0, 0, 1));
+        }
+
+        #bmistyle {
+
+            font-family: "Arial Rounded MT Bold";
+            font-size: large;
+            padding-top: 50px;
+            width: 100%;
+            height: 700px;
+            background-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(255, 0, 0, 1));
+
+        }
+
+        .myButton {
+            -moz-box-shadow: inset 0px 0px 15px 3px #23395e;
+            -webkit-box-shadow: inset 0px 0px 15px 3px #23395e;
+            box-shadow: inset 0px 0px 15px 3px #23395e;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2e466e), color-stop(1, #415989));
+            background: -moz-linear-gradient(top, #2e466e 5%, #415989 100%);
+            background: -webkit-linear-gradient(top, #2e466e 5%, #415989 100%);
+            background: -o-linear-gradient(top, #2e466e 5%, #415989 100%);
+            background: -ms-linear-gradient(top, #2e466e 5%, #415989 100%);
+            background: linear-gradient(to bottom, #2e466e 5%, #415989 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2e466e', endColorstr='#415989', GradientType=0);
+            background-color: #2e466e;
+            -moz-border-radius: 17px;
+            -webkit-border-radius: 17px;
+            border-radius: 17px;
+            border: 1px solid #1f2f47;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 15px;
+            padding: 6px 13px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #263666;
+        }
+
+        .myButton:hover {
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #415989), color-stop(1, #2e466e));
+            background: -moz-linear-gradient(top, #415989 5%, #2e466e 100%);
+            background: -webkit-linear-gradient(top, #415989 5%, #2e466e 100%);
+            background: -o-linear-gradient(top, #415989 5%, #2e466e 100%);
+            background: -ms-linear-gradient(top, #415989 5%, #2e466e 100%);
+            background: linear-gradient(to bottom, #415989 5%, #2e466e 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#415989', endColorstr='#2e466e', GradientType=0);
+            background-color: #415989;
+        }
+
+        .myButton:active {
+            position: relative;
+            top: 1px;
+        }
+    </style>
+</head>
+<body>
+<section id="bmistyle">
+    <div class="container">
+
+        <form class="list-inline" th:object="${calculator}" th:action="@{/CalculatorBmi}" th:method="post">
+            <div class="form-group">
+                <label class="control-label"> Masa ciała podana w kg:</label>
+                <input type="text" class="form-control" th:field="*{bodyweight}"
+                       placeholder="Masa ciała w kilogramach"/>
+                <p th:if="${#fields.hasErrors('bodyweight')}" th:errors="*{bodyweight}"/>
+
+            </div>
+            <div class="form-group">
+                <label class="control-label">Wzrost podany w metrach:</label>
+                <input type="text" class="form-control" th:field="*{height}" placeholder="Wzrost w metrach"/>
+                <p th:if="${#fields.hasErrors('height')}" th:errors="*{bodyweight}"/>
+
+            </div>
+            <center>
+                <div class="row">
+                    <button type="submit" class="myButton">Oblicz</button>
+                </div>
+            </center>
+            <center>
+                <div>
+
+                    <font size="6">
+
+                        Wynik:</font> <span th:if="${Wynik!= null}" th:text="${Wynik}"></span>
+
+                </div>
+            </center>
+
+        </form>
+        <br>
+        <br>
+
+        <div class="container">
+
+            <table class="table" border="7" cellpadding="7">
+                <caption align="align"><font color="black">
+                    <center><b> TABELA - Przedziały wskaźnika BMI</b></center>
+                </font></caption>
+                <thead>
+                <tr>
+                    <td><font size="3"><b>
+                        <center>Wartość</center>
+                    </b></font></td>
+                    <td><font size="3"><b>
+                        <center>Co oznacza?</center>
+                    </b></font></td>
+                    <td><font size="3"><b>
+                        <center>Dieta</center>
+                    </b></font></td>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><b>
+                        <center>BMI < 18,5</center>
+                    </b></td>
+                    <td><b>
+                        <center>niedowaga</center>
+                    </b></td>
+                    <td><b>
+                        <div class="row">
+                            <center>
+                                <a href="/underweight"><font size="3"> PORADY </font></a>
+                            </center>
+                        </div>
+                    </b></td>
+
+                <tr>
+                <tr>
+                    <td><b>
+                        <center>18,5 ≤ BMI ≤ 24,9</center>
+                    </b></td>
+                    <td><b>
+                        <center>waga prawidłowa</center>
+                    </b></td>
+                    <td><b>
+                        <div class="row">
+                            <center>
+                                <a href="/correctweight"><font size="3"> PORADY</font></a>
+                            </center>
+                        </div>
+                    </b></td>
+                <tr>
+                <tr>
+                    <td><b>
+                        <center>25 ≤ BMI ≤ 29,9</center>
+                    </b></td>
+                    <td><b>
+                        <center>nadwaga</center>
+                    </b></td>
+                    <td><b>
+                        <div class="row">
+                            <center>
+                                <a href="/overweight"><font size="3"> PORADY</font></a>
+                            </center>
+                        </div>
+                    </b></td>
+                <tr>
+                <tr>
+                    <td><b>
+                        <center>BMI > 30</center>
+                    </b></td>
+                    <td><b>
+                        <center>otyłość</center>
+                    </b></td>
+                    <td><b>
+                        <div class="row">
+                            <center>
+                                <a href="/obesity"><font size="3"> PORADY</font></a>
+                            </center>
+                        </div>
+                    </b></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <center>
+            <div> Czasem wyróżnia się także przedział BMI > 35 (otyłość drugiego stopnia) oraz BMI > 40,
+                który wskazuje na otyłość olbrzymią i bardzo duże zagrożenie chorobami powiązanymi z nadmierną masą
+                ciała .
+            </div>
+        </center>
+</section>
+</body>
+</html>
